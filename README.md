@@ -17,7 +17,7 @@ The following functionalities are completed:
 
 Here's a demo of implemented user stories:
 
-<img src='demo.png' title='Demo' width='' alt='Demo' />
+<img src='overview.png' title='Demo' width='' alt='Demo' />
 
 
 ## Open-source libraries used

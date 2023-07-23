@@ -1,0 +1,6 @@
+.card{
+    /* background-color: rgba(187, 171, 30, 0.651); */
+    background: linear-gradient(to bottom, #7a37e6b4, #b82bca91);
+    border-radius: 20px;
+    padding: 80px;
+}

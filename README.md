@@ -25,14 +25,11 @@ Here's a demo of implemented user stories:
 - [React](https://react.dev/)
 - [Material-UI](https://mui.com/)
 
-## Available Scripts
+## How to test
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Install NodeJs
+- Clone repository.
+- Navigate to local repo using commande prompt.
+- Run npm install.
+- Run npm start.
+- Open [http://localhost:3000](http://localhost:3000) to view it in your browser.

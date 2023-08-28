@@ -1,42 +1,43 @@
 import React from "react";
-import Slider from "@mui/material/Slider";
-import { Typography } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 
 const SliderComponent = ({
-    defaultValue,
-    min,
-    max,
-    label,
-    unit,
-    onChange,
-    amount,
-    value,
-    steps
-  }) => {
-    return (
-      // Title and amount of the slider
-      <Stack my={5}>
-        <Stack direction="row" gap={2.5}>
-            <Typography variant="h5">{label}: </Typography>
-            <Typography variant="h4">
-                {unit} {amount}
-            </Typography>
-        </Stack>
+  min,
+  max,
+  label,
+  unit,
+  onChange,
+  value,
+}) => {
+  const handleInputChange = (event) => {
+    const newValue = parseFloat(event.target.value);
+    if (!isNaN(newValue)) {
+      onChange(newValue);
+    }
+  };
 
-        <Slider
-            min={min}
-            max={max}
-            defaultValue={defaultValue}
-            aria-label="Default"
-            valueLabelDisplay="auto"
-            onChange={onChange}
-            value={value}
-            marks
-            step={steps}
-        />
+  return (
+    <Stack my={5}>
+      <Stack direction="row" gap={2.5}>
+        <Typography variant="h5">{label}: </Typography>
       </Stack>
-    )
-  }
-  
-  export default SliderComponent
+
+      <TextField
+        type="number"
+        value={value}
+        onChange={handleInputChange}
+        inputProps={{
+          min: min,
+          max: max,
+          style: { textAlign: "right" },
+        }}
+        InputProps={{
+          endAdornment: <Typography>{unit}</Typography>,
+        }}
+      />
+    </Stack>
+  );
+};
+
+export default SliderComponent;

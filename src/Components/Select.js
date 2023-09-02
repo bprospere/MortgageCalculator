@@ -1,22 +1,36 @@
-import React from "react";
+import React , { useState } from "react";
 import SliderComponent from "./Slider";
-import { Stack, Select, MenuItem,Typography } from "@mui/material";
+import { Stack, Select, MenuItem,Typography, Dialog,DialogActions, DialogContent,DialogContentText,DialogTitle,
+ Button,} from "@mui/material";
 import Result from "./Result";
 import "../style.css";
 
-const SliderSelect = ({ data, setData }) => {
+const SliderSelect = ({ data, setData}) => {
   var bank_limit;
 
   const handleHomeValueChange = (value) => {
+    setData((prevData) => {
+      let downPayment = prevData.downPayment || 0;
+      let loanAmount = (value - downPayment).toFixed(0);
+  
+      return {
+        ...prevData,
+        homeValue: value,
+        loanAmount: loanAmount,
+      };
+    });
+  }
+  
+  
+  const handlePurchaseTypeChange = (event) => {
+    const purchaseTypeSelect = event.target.value;
     setData((prevData) => ({
       ...prevData,
-      homeValue: value,
-      downPayment: (0.2 * value).toFixed(0),
-      loanAmount: (0.8 * value).toFixed(0),
+      purchaseType: purchaseTypeSelect,
     }));
   };
+  
 
-  // ... (rest of the functions)
 
   const handleUnitChange = (event) => {
     const selectedUnit = event.target.value;
@@ -51,18 +65,144 @@ const SliderSelect = ({ data, setData }) => {
       loanTerm: value,
     }));
   };
+  const handleTimeUnitChange = (event) => {
+    const selectedTimeUnit = event.target.value;
+    setData((prevData) => ({
+      ...prevData,
+      timeUnit: selectedTimeUnit,
+    }));
+    if (selectedTimeUnit === "years") {
+      handleOpenPaymentDialog();
+    }
+  };
+  
+   
+  const [paymentType, setPaymentType] = useState(null); // "monthly" or "yearly"
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  
+  const handlePaymentTypeChange = (type) => {
+    setPaymentType(type);
+    setPaymentDialogOpen(false);
+  };
+  
+  const handleOpenPaymentDialog = () => {
+    setPaymentDialogOpen(true);
+  };
+   
   // Displayed values with selected unit
   const displayedHomeValue = data.unit + data.homeValue;
   const displayedDownPayment = data.unit + data.downPayment;
   const displayedLoanAmount = data.unit + data.loanAmount;
-  const displayedLoanTerm = data.loanTerm + " years";
+  const displayedLoanTerm = `${data.loanTerm} ${data.timeUnit}`;
+  const displayPurchaseType= data.purchaseType;
+ 
+
+ 
+
+const [openDialog, setOpenDialog] = useState(true);
+
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
 
   return (
     <div className = "card">
         <Typography variant="h4" textAlign="center" marginBottom={2}>Mortgage-calculator </Typography>
 
      
-    
+      <Stack direction="row" justifyContent="space-between">
+
+      <div>
+          <label htmlFor="purchaseTypeSelect">Select Purchase Type:</label>
+          <Select
+            id="purchaseTypeSelect"
+            value={data.purchaseType}
+            onChange={handlePurchaseTypeChange}
+            style={{ marginLeft: "2px" }}
+          >
+            <MenuItem value="Purchase price">purchase</MenuItem>
+            <MenuItem value="Business">business</MenuItem>
+          </Select>
+        </div>
+       
+
+      <div>
+          <label htmlFor="unitSelect">Unit:</label>
+          <Select
+            id="unitSelect"
+            value={data.unit}
+            onChange={handleUnitChange}
+            style={{ marginLeft: "2px" }}
+          >
+            <MenuItem value="$">USD</MenuItem>
+            <MenuItem value="€">EUR</MenuItem>
+            <MenuItem value="HTG">HTG</MenuItem>
+            <MenuItem value="GBP">GBP</MenuItem>
+            <MenuItem value="JPY">JPY</MenuItem>
+            <MenuItem value="CAD">CAD</MenuItem>
+            <MenuItem value="AUD">AUD</MenuItem>
+           
+          </Select>
+        </div>
+        <div >
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Choose Units</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          Please choose a currency unit, a time unit, and select whether it's for a Purchase Price or Business.
+          Ensure you do not choose negative values.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      
+    </div>
+       <div>
+          <label htmlFor="timeUnitSelect">Time Unit:</label>
+          <Select
+            id="timeUnitSelect"
+            value={data.timeUnit}
+            onChange={handleTimeUnitChange}
+            style={{ marginLeft: "2px" }}
+          >
+            <MenuItem value="days">Days</MenuItem>
+            <MenuItem value="weeks">Weeks</MenuItem>
+            <MenuItem value="weekends">Weekends</MenuItem>
+            <MenuItem value="months">Months</MenuItem>
+            <MenuItem value="years">Years</MenuItem>
+          </Select>
+          <Button variant="outlined" onClick={handleOpenPaymentDialog}>
+  Choose Payment Type
+</Button>
+<Dialog open={paymentDialogOpen} onClose={() => setPaymentDialogOpen(false)}>
+  <DialogTitle>Choose Payment Type</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+      Please choose the payment type:
+    </DialogContentText>
+    <Button onClick={() => handlePaymentTypeChange("monthly")} color="primary">
+      Monthly Payment
+    </Button>
+    <Button onClick={() => handlePaymentTypeChange("yearly")} color="primary">
+      Yearly Payment
+    </Button>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setPaymentDialogOpen(false)} color="primary">
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
+
+      </div>
+      
+      </Stack>
       <Stack direction="row" justifyContent="space-between">
         <SliderComponent
           onChange={handleHomeValueChange}
@@ -72,10 +212,9 @@ const SliderSelect = ({ data, setData }) => {
           steps={100}
           amount={displayedHomeValue}
           textFieldSuffix={data.unit}
-          label={`Purchase price (${data.unit})`}
+          label={`${displayPurchaseType} (${data.unit})`}
           value={data.homeValue}
         />
-
         <SliderComponent
           onChange={handleDownPaymentChange}
           defaultValue={data.downPayment}
@@ -113,41 +252,20 @@ const SliderSelect = ({ data, setData }) => {
           label={`Loan Amount (${data.unit})`}
           value={data.loanAmount}
         />
-
         <SliderComponent
-          onChange={handleLoanTermChange}
-          defaultValue={data.loanTerm}
-          min={0}
-          steps={1}
-          unit="years"
-          amount={displayedLoanTerm}
-          label="Repayment time"
-          value={data.loanTerm}
+              onChange={handleLoanTermChange}
+              defaultValue={data.loanTerm}
+              min={0}
+              steps={100}
+              amount={displayedLoanTerm} 
+              label={`Repayment time(${data.timeUnit})`}
+              value={data.loanTerm}
         />
 
-        <div>
-          <label htmlFor="unitSelect">Unit:</label>
-          <Select
-            id="unitSelect"
-            value={data.unit}
-            onChange={handleUnitChange}
-            style={{ marginLeft: "8px" }}
-          >
-            <MenuItem value="$">USD</MenuItem>
-            <MenuItem value="€">EUR</MenuItem>
-            <MenuItem value="HTG">HTG</MenuItem>
-            <MenuItem value="GBP">GBP</MenuItem>
-            <MenuItem value="JPY">JPY</MenuItem>
-            <MenuItem value="CAD">CAD</MenuItem>
-            <MenuItem value="AUD">AUD</MenuItem>
-            {/* Add more currency options here */}
-          </Select>
-        </div>
+        <Result data={data} paymentType={paymentType} />
 
-        <Result data={data} />
       </Stack>
     </div>
   );
 };
-
 export default SliderSelect;

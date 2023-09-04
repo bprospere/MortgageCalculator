@@ -12,12 +12,10 @@ const Result = ({ data }) => {
       (1 + interestPerMonth) ** totalLoanMonths) /
     ((1 + interestPerMonth) ** totalLoanMonths - 1);
 
-  const totalLoanDays = loanTerm * 365;
-  const interestPerDay = interestRate / 100 / 365;
-  const dailyPayment =
-    (loanAmount *
-      interestPerDay) /
-    (1 - Math.pow(1 + interestPerDay, -totalLoanDays));
+  
+    const dailyPayment = monthlyPayment / (365 / 12);
+
+    
 
   const displayedMonthlyPayment = data.unit;
   let displayedPaymentType = " ";
@@ -29,64 +27,43 @@ const Result = ({ data }) => {
     case 'weeks':
       displayedPaymentType = 'Weekly Payment';
       break;
-    case 'weekends':
-      displayedPaymentType = 'Weekend Payment';
-      break;
+  
     case 'months':
       displayedPaymentType = 'Monthly Payment';
       break;
     case 'years':
-      if (data.paymentType === "monthly") {
-        displayedPaymentType = 'Monthly Payment';
-      } else {
-        displayedPaymentType = 'Yearly Payment';
-      }
+      displayedPaymentType = 'Yearly Payment';
+    
+      
       break;
     default:
       displayedPaymentType = 'Payment';
   }
 
-  const totalLoanWeeks = loanTerm;
-  const interestPerWeek = interestRate / 100 / 52;
-  const weeklyPayment =
-    (loanAmount *
-      interestPerWeek *
-      (1 + interestPerWeek) ** totalLoanWeeks) /
-    ((1 + interestPerWeek) ** totalLoanWeeks - 1);
-
-  const totalWeekendPayments = Math.floor(loanTerm);
-
-  const weekendPayment =
-    (loanAmount *
-      interestPerWeek *
-      (1 + interestPerWeek) ** totalWeekendPayments) /
-    ((1 + interestPerWeek) ** totalWeekendPayments - 1);
+  
+  const weeklyPayment = monthlyPayment / (52 / 12);
 
   const annualPayment = monthlyPayment * 12;
 
   let paymentResult = "";
   switch (data.timeUnit) {
     case 'days':
-      paymentResult = dailyPayment.toFixed(2);
+      paymentResult = dailyPayment.toFixed(3);
       break;
     case 'weeks':
-      paymentResult = weeklyPayment.toFixed(2);
+      paymentResult = weeklyPayment.toFixed(3);
       break;
-    case 'weekends':
-      paymentResult = weekendPayment.toFixed(2);
-      break;
+    
     case 'months':
-      paymentResult = monthlyPayment.toFixed(2);
+      paymentResult = monthlyPayment.toFixed(3);
       break;
     case 'years':
-      if (data.paymentType === " Monthly Payment") {
-        paymentResult = monthlyPayment.toFixed(2);
-      } else {
-        paymentResult = annualPayment.toFixed(2);
-      }
+     
+        paymentResult = annualPayment.toFixed(3);
+      
       break;
     default:
-      paymentResult = monthlyPayment.toFixed(2);
+      paymentResult = monthlyPayment.toFixed(3);
   }
 
   return (

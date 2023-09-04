@@ -71,29 +71,20 @@ const SliderSelect = ({ data, setData}) => {
       ...prevData,
       timeUnit: selectedTimeUnit,
     }));
-    if (selectedTimeUnit === "years") {
-      handleOpenPaymentDialog();
-    }
+    
   };
   
    
-  const [paymentType, setPaymentType] = useState(null); // "monthly" or "yearly"
-  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+
   
-  const handlePaymentTypeChange = (type) => {
-    setPaymentType(type);
-    setPaymentDialogOpen(false);
-  };
   
-  const handleOpenPaymentDialog = () => {
-    setPaymentDialogOpen(true);
-  };
-   
+  
+  
   // Displayed values with selected unit
   const displayedHomeValue = data.unit + data.homeValue;
   const displayedDownPayment = data.unit + data.downPayment;
   const displayedLoanAmount = data.unit + data.loanAmount;
-  const displayedLoanTerm = `${data.loanTerm} ${data.timeUnit}`;
+  
   const displayPurchaseType= data.purchaseType;
  
 
@@ -173,34 +164,11 @@ const handleCloseDialog = () => {
           >
             <MenuItem value="days">Days</MenuItem>
             <MenuItem value="weeks">Weeks</MenuItem>
-            <MenuItem value="weekends">Weekends</MenuItem>
             <MenuItem value="months">Months</MenuItem>
             <MenuItem value="years">Years</MenuItem>
           </Select>
-          <Button variant="outlined" onClick={handleOpenPaymentDialog}>
-  Choose Payment Type
-</Button>
-<Dialog open={paymentDialogOpen} onClose={() => setPaymentDialogOpen(false)}>
-  <DialogTitle>Choose Payment Type</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-      Please choose the payment type:
-    </DialogContentText>
-    <Button onClick={() => handlePaymentTypeChange("monthly")} color="primary">
-      Monthly Payment
-    </Button>
-    <Button onClick={() => handlePaymentTypeChange("yearly")} color="primary">
-      Yearly Payment
-    </Button>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setPaymentDialogOpen(false)} color="primary">
-      Close
-    </Button>
-  </DialogActions>
-</Dialog>
-
-      </div>
+         
+    </div>
       
       </Stack>
       <Stack direction="row" justifyContent="space-between">
@@ -232,9 +200,8 @@ const handleCloseDialog = () => {
           min={0}
           max={100}
           steps={0.5}
-          unit="%"
           amount={data.interestRate}
-          label="Interest Rate"
+          label="Interest Rate (%)"
           value={data.interestRate}
         />
        
@@ -252,17 +219,18 @@ const handleCloseDialog = () => {
           label={`Loan Amount (${data.unit})`}
           value={data.loanAmount}
         />
-        <SliderComponent
-              onChange={handleLoanTermChange}
-              defaultValue={data.loanTerm}
-              min={0}
-              steps={100}
-              amount={displayedLoanTerm} 
-              label={`Repayment time(${data.timeUnit})`}
-              value={data.loanTerm}
+          <SliderComponent
+          onChange={handleLoanTermChange}
+          defaultValue={data.loanTerm}
+          min={0}
+          steps={1}
+          amount={data.loanTerm}
+          label="Repayment time (years)"
+          value={data.loanTerm}
         />
 
-        <Result data={data} paymentType={paymentType} />
+
+        <Result data={data} />
 
       </Stack>
     </div>

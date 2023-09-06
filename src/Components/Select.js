@@ -21,18 +21,7 @@ const SliderSelect = ({ data, setData}) => {
     });
   }
   
-  
-  const handlePurchaseTypeChange = (event) => {
-    const purchaseTypeSelect = event.target.value;
-    setData((prevData) => ({
-      ...prevData,
-      purchaseType: purchaseTypeSelect,
-    }));
-  };
-  
-
-
-  const handleUnitChange = (event) => {
+   const handleUnitChange = (event) => {
     const selectedUnit = event.target.value;
     setData((prevData) => ({
       ...prevData,
@@ -65,32 +54,13 @@ const SliderSelect = ({ data, setData}) => {
       loanTerm: value,
     }));
   };
-  const handleTimeUnitChange = (event) => {
-    const selectedTimeUnit = event.target.value;
-    setData((prevData) => ({
-      ...prevData,
-      timeUnit: selectedTimeUnit,
-    }));
-    
-  };
   
-   
-
-  
-  
-  
-  
-  // Displayed values with selected unit
+   // Displayed values with selected unit
   const displayedHomeValue = data.unit + data.homeValue;
   const displayedDownPayment = data.unit + data.downPayment;
   const displayedLoanAmount = data.unit + data.loanAmount;
   
-  const displayPurchaseType= data.purchaseType;
- 
-
- 
-
-const [openDialog, setOpenDialog] = useState(true);
+  const [openDialog, setOpenDialog] = useState(true);
 
 const handleCloseDialog = () => {
   setOpenDialog(false);
@@ -104,19 +74,7 @@ const handleCloseDialog = () => {
      
       <Stack direction="row" justifyContent="space-between">
 
-      <div>
-          <label htmlFor="purchaseTypeSelect">Select Purchase Type:</label>
-          <Select
-            id="purchaseTypeSelect"
-            value={data.purchaseType}
-            onChange={handlePurchaseTypeChange}
-            style={{ marginLeft: "2px" }}
-          >
-            <MenuItem value="Purchase price">purchase</MenuItem>
-            <MenuItem value="Business">business</MenuItem>
-          </Select>
-        </div>
-       
+     
 
       <div>
           <label htmlFor="unitSelect">Unit:</label>
@@ -141,7 +99,7 @@ const handleCloseDialog = () => {
         <DialogTitle>Choose Units</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          Please choose a currency unit, a time unit, and select whether it's for a Purchase Price or Business.
+          Please choose a currency unit  before starting.
           Ensure you do not choose negative values.
           </DialogContentText>
         </DialogContent>
@@ -154,21 +112,7 @@ const handleCloseDialog = () => {
 
       
     </div>
-       <div>
-          <label htmlFor="timeUnitSelect">Time Unit:</label>
-          <Select
-            id="timeUnitSelect"
-            value={data.timeUnit}
-            onChange={handleTimeUnitChange}
-            style={{ marginLeft: "2px" }}
-          >
-            <MenuItem value="days">Days</MenuItem>
-            <MenuItem value="weeks">Weeks</MenuItem>
-            <MenuItem value="months">Months</MenuItem>
-            <MenuItem value="years">Years</MenuItem>
-          </Select>
-         
-    </div>
+      
       
       </Stack>
       <Stack direction="row" justifyContent="space-between">
@@ -180,7 +124,7 @@ const handleCloseDialog = () => {
           steps={100}
           amount={displayedHomeValue}
           textFieldSuffix={data.unit}
-          label={`${displayPurchaseType} (${data.unit})`}
+          label={`Purchase Price (${data.unit})`}
           value={data.homeValue}
         />
         <SliderComponent

@@ -1,7 +1,6 @@
-import React , { useState } from "react";
+import React from "react";
 import SliderComponent from "./Slider";
-import { Stack, Select, MenuItem,Typography, Dialog,DialogActions, DialogContent,DialogContentText,DialogTitle,
- Button,} from "@mui/material";
+import { Stack,  Typography} from "@mui/material";
 import Result from "./Result";
 import "../style.css";
 
@@ -21,13 +20,7 @@ const SliderSelect = ({ data, setData}) => {
     });
   }
   
-   const handleUnitChange = (event) => {
-    const selectedUnit = event.target.value;
-    setData((prevData) => ({
-      ...prevData,
-      unit: selectedUnit,
-    }));
-  };
+  
   const handleDownPaymentChange = (value) => {
     setData((prevData) => ({
       ...prevData,
@@ -60,11 +53,7 @@ const SliderSelect = ({ data, setData}) => {
   const displayedDownPayment = data.unit + data.downPayment;
   const displayedLoanAmount = data.unit + data.loanAmount;
   
-  const [openDialog, setOpenDialog] = useState(true);
-
-const handleCloseDialog = () => {
-  setOpenDialog(false);
-};
+  
 
 
   return (
@@ -76,42 +65,6 @@ const handleCloseDialog = () => {
 
      
 
-      <div>
-          <label htmlFor="unitSelect">Unit:</label>
-          <Select
-            id="unitSelect"
-            value={data.unit}
-            onChange={handleUnitChange}
-            style={{ marginLeft: "2px" }}
-          >
-            <MenuItem value="$">USD</MenuItem>
-            <MenuItem value="€">EUR</MenuItem>
-            <MenuItem value="HTG">HTG</MenuItem>
-            <MenuItem value="GBP">GBP</MenuItem>
-            <MenuItem value="JPY">JPY</MenuItem>
-            <MenuItem value="CAD">CAD</MenuItem>
-            <MenuItem value="AUD">AUD</MenuItem>
-           
-          </Select>
-        </div>
-        <div >
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Choose Units</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-          Please choose a currency unit  before starting.
-          Ensure you do not choose negative values.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      
-    </div>
       
       
       </Stack>
@@ -124,7 +77,7 @@ const handleCloseDialog = () => {
           steps={100}
           amount={displayedHomeValue}
           textFieldSuffix={data.unit}
-          label={`Purchase Price (${data.unit})`}
+          label={`Purchase Price ($)`}
           value={data.homeValue}
         />
         <SliderComponent
@@ -135,7 +88,7 @@ const handleCloseDialog = () => {
           steps={100}
           amount={displayedDownPayment}
           textFieldSuffix={data.unit}
-          label={`Down Payment (${data.unit})`}
+          label={`Down Payment ($)`}
           value={data.downPayment}
         />
           <SliderComponent
@@ -143,7 +96,7 @@ const handleCloseDialog = () => {
           defaultValue={data.interestRate}
           min={0}
           max={100}
-          steps={0.5}
+          steps={0.1}
           amount={data.interestRate}
           label="Interest Rate (%)"
           value={data.interestRate}
@@ -160,14 +113,14 @@ const handleCloseDialog = () => {
           steps={100}
           amount={displayedLoanAmount}
           textFieldSuffix={data.unit}
-          label={`Loan Amount (${data.unit})`}
+          label={`Loan Amount ($)`}
           value={data.loanAmount}
         />
           <SliderComponent
           onChange={handleLoanTermChange}
           defaultValue={data.loanTerm}
           min={0}
-          steps={1}
+          steps={0.1}
           amount={data.loanTerm}
           label="Repayment time (years)"
           value={data.loanTerm}

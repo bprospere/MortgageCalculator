@@ -17,7 +17,7 @@ const Result = ({ data }) => {
  return (
     <Stack my={1.4}>
       <Typography textAlign="center" variant="h5">
-        {` Monthly Payment ${data.unit} `}
+        {` Monthly Payment ($) `}
       </Typography>
       <Typography textAlign="center" variant="h4">
         {monthlyPayment.toFixed(2)};
